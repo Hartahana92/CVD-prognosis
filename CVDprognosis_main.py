@@ -24,6 +24,7 @@ if data is not None:
     st.write(data)
     scaler_sv = pickle.load(open('scaler_sv.pkl', 'rb'))
     data = scaler_sv.transform(data)
+    data = preprocessing.normalize(data, norm='l2')
     a=loaded_model.predict_proba(data)
     b=float(a[:,1])*100
     st.write('вероятность CCЗ = ', round(b,2), '%')
@@ -31,4 +32,4 @@ if data is not None:
         loaded_model2 = pickle.load(open('finalized_model_2.pkl', 'rb'))
         c=loaded_model2.predict_proba(data)
         d=float(c[:,1])*100
-        st.write('вероятность развития HTA = ', round(d,2), '%')
+        st.write('вероятность развития ГБ = ', round(d,2), '%')
