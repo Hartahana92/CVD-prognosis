@@ -22,10 +22,12 @@ if data is not None:
     data = pd.read_excel(data)
     loaded_model = pickle.load(open('finalized_model.pkl', 'rb'))
     st.write(data)
+    scaler_sv = pickle.load(open('scaler_sv.pkl', 'rb'))
+    data = scaler_sv.transform(data)
     a=loaded_model.predict_proba(data)
     b=float(a[:,1])*100
     st.write('вероятность CCЗ = ', round(b,2), '%')
-    if b>=70:
+    if b>=75:
         loaded_model2 = pickle.load(open('finalized_model_2.pkl', 'rb'))
         c=loaded_model2.predict_proba(data)
         d=float(c[:,1])*100
