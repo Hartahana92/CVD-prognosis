@@ -20,7 +20,7 @@ st.write("Вероятность развития ССЗ")
 data = st.file_uploader("Загрузите файл")
 if data is not None:
     data = pd.read_excel(data)
-    data_aa=data[['Глицин',	'Аланин', 'Пролин',	'Валин','Лейцин','Изолейцин','Орнитин',	'Аспаргиновая кислота',	'Фенилаланин',	'Аргинин',	'Цитруллин',	'Серин',	'Треонин',	'Лизин',	'Тирозин',	'Метионин']]
+    data_aa = data[['Глицин','Аланин','Пролин','Валин','Лейцин','Изолейцин','Орнитин','Аспаргиновая кислота',	'Фенилаланин','Аргинин','Цитруллин','Серин','Треонин','Лизин','Тирозин','Метионин']]
     st.write('Информация о пациенте:')
     st.write('ФИО', data.iat[0,0])
     st.write('Дата рождения', data.iat[0,1])
@@ -28,7 +28,7 @@ if data is not None:
     st.write('№ анализа', data.iat[0,3])
     st.write('Объект', data.iat[0,4])
     loaded_model = pickle.load(open('finalized_model.pkl', 'rb'))
-    st.write(data_aa)
+    st.write(data_aa.T)
     scaler_sv = pickle.load(open('scaler_sv.pkl', 'rb'))
     data = scaler_sv.transform(data)
     data = preprocessing.normalize(data, norm='l2')
