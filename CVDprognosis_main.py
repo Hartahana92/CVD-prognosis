@@ -15,11 +15,18 @@ plt.rcParams['figure.figsize'] = 10, 6
 from sklearn.metrics import roc_auc_score
 from sklearn import preprocessing
 from sklearn import metrics
-st.title("Предсказательная модель оценки развития сердечно-сосудистых заболеваний")
+st.title("РЕЗУЛЬТАТЫ МЕТАБОЛОМНОГО ПРОФИЛИРОВАНИЯ")
 st.write("Вероятность развития ССЗ")
 data = st.file_uploader("Загрузите файл")
 if data is not None:
     data = pd.read_excel(data)
+
+    st.write('Информация о пациенте:')
+    st.write('ФИО', data.iat[0,0])
+    st.write('Дата рождения', data.iat[0,1])
+    st.write('Пол', data.iat[0,2])
+    st.write('№ анализа', data.iat[0,3])
+    st.write('Объект', data.iat[0,4])
     loaded_model = pickle.load(open('finalized_model.pkl', 'rb'))
     st.write(data)
     scaler_sv = pickle.load(open('scaler_sv.pkl', 'rb'))
