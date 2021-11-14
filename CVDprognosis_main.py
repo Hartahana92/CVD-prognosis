@@ -27,6 +27,57 @@ if data is not None:
     st.write('Пол', data.iat[0,2])
     st.write('№ анализа', data.iat[0,3])
     st.write('Объект', data.iat[0,4])
+    data0 = pd.read_excel('data0.xlsx')
+    data_aa1 = data_aa.T
+    data_aa1 = data_aa1.reset_index()
+    data_aa1.columns = ['Метаболит', 'Результат']
+    aa = data0.merge(data_aa1, how='left', left_on='Метаболит', right_on='Метаболит')
+    df=aa.copy()
+    def make_result_column(x):
+        if x[0] < x[2] < x[1]:
+            return 'Норма'
+        if x[2] / 5 < x[1] and x[2] > x[1]:
+            return 'Риск повышения'
+        if x[2] * 5 > x[0] and x[2] < x[0]:
+            return 'Риск понижения'
+        if x[2] / 5 > x[1]:
+            return 'Повышено'
+        else:
+            return 'Понижено'
+
+
+    df['Вывод'] = df[df.columns[1:4]].apply(lambda x: make_result_column(x), axis=1)
+    rel_up = df['Результат'] / df['Верхняя граница']
+    df['Риск повышения'] = rel_up.loc[rel_up.between(1, 5)]
+    df['Повышено'] = rel_up.loc[rel_up.between(5, np.inf)]
+    df['Норма'] = rel_up.loc[rel_up.between(0, 1)]
+    rel_down = df['Нижняя граница'] / df['Результат']
+    df['Риск понижения'] = rel_down.loc[rel_down.between(1, 5)]
+    df['Понижено'] = rel_down.loc[rel_down.between(5, np.inf)]
+
+    df = df[['Метаболит', 'Нижняя граница', 'Верхняя граница', 'Результат', 'Вывод',
+             'Понижено', 'Риск понижения', 'Норма', 'Риск повышения', 'Повышено']]
+
+
+    def color(x, props=''):
+        if type(x) != str:
+            if x > 5:
+                return "background-color: lightred"
+            if x < 5 and x > 1:
+                return "background-color: lightyellow"
+            if x < 1:
+                return "background-color: lightgreen"
+            else:
+                return "background-color: None"
+        else:
+            return "background-color: None"
+
+
+    color_cols = ['Понижено', 'Риск понижения', 'Норма', 'Риск повышения', 'Повышено']
+    st.dataframe(df.style.applymap(lambda x: color(x), subset=color_cols) \
+        .format(na_rep='', precision=2, subset=df.columns) \
+        .format(na_rep='', precision=0, subset=['Нижняя граница', 'Верхняя граница']))
+
     loaded_model = pickle.load(open('finalized_model.pkl', 'rb'))
     st.write(data_aa.T)
     scaler_sv = pickle.load(open('scaler_sv.pkl', 'rb'))
