@@ -33,11 +33,6 @@ if data is not None:
     info['№ анализа'] = data['Номер']
     info['Объект'] = data['Объект']
     st.dataframe(info)
-    st.write('ФИО', data.iat[0, 0])
-    st.write('Дата рождения:', data.iat[0, 1])
-    st.write('Пол:', data.iat[0, 2])
-    st.write('№ анализа', data.iat[0, 3])
-    st.write('Объект', data.iat[0, 4])
     del data['ФИО']
     del data['Дата рождения']
     del data['Пол']
