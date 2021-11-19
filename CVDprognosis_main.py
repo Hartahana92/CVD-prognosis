@@ -190,6 +190,7 @@ if datazero is not None:
         .format(na_rep=' ', precision=0, subset=['Нижняя граница', 'Верхняя граница']))
 
     st.write('ПРЕДСКАЗАТЕЛЬНАЯ МОДЕЛЬ ОЦЕНКИ РАЗВИТИЯ СЕРДЕЧНО-СОСУДИСТЫХ ЗАБОЛЕВАНИЙ')
+    st.write('Классификационная модель построена на основе алгоритма машинного обучения "Случайный Лес"')
     # подгрузка модели
     loaded_model = pickle.load(open('RF_model_1711.pkl', 'rb'))
     #st.write(data_aa.T)
@@ -241,7 +242,9 @@ if datazero is not None:
         data2 = preprocessing.normalize(data2, norm='l2')
         c=loaded_model2.predict_proba(data2)
         d=float(c[:,1])*100
-        st.write('ВЕРОЯТНОСТЬ РАЗВИТИЯ HTA ', round(d,2), '%')
+        e=float(c[:,0])*100
+        st.write('ВЕРОЯТНОСТЬ РАЗВИТИЯ ГБ ', round(d,2), '%')
+        st.write('ВЕРОЯТНОСТЬ РАЗВИТИЯ ИБС ', round(e, 2), '%')
    # result1 = pd.read_excel('result1.xlsx')
     #result1['Результат']=round(b,2)
     #if b<70:
