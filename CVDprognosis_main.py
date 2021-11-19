@@ -19,9 +19,9 @@ from sklearn import metrics
 
 st.title("РЕЗУЛЬТАТЫ МЕТАБОЛОМНОГО ПРОФИЛИРОВАНИЯ")
 st.write("Вероятность развития ССЗ")
-data = st.file_uploader("Загрузите файл")
-if data is not None:
-    data = pd.read_excel(data)
+datazero = st.file_uploader("Загрузите файл")
+if datazero is not None:
+    data = pd.read_excel(datazero)
     data_aa = data[
         ['Глицин', 'Аланин', 'Пролин', 'Валин', 'Лейцин', 'Изолейцин', 'Орнитин', 'Аспаргиновая кислота', 'Фенилаланин',
          'Аргинин', 'Цитруллин', 'Серин', 'Треонин', 'Лизин', 'Тирозин', 'Метионин']]
@@ -193,7 +193,8 @@ if data is not None:
     # подгрузка модели
     loaded_model = pickle.load(open('RF_model_1711.pkl', 'rb'))
     #st.write(data_aa.T)
-    data1 = data[
+    data1 = pd.read_excel(datazero)
+    data1 = data1[
         ['Глицин', 'Аспаргиновая кислота', 'Лизин', 'АДМА', 'АДМА/Аргинин', 'Холин (свободный)', 'Карнитин (С0)',
          'Acetylcarnitine (С2)', 'Propionylcarnitine (С3)',
          'Tiglylcarnitine (C5:1)', 'Isovalerylcarnitine (iC5)', 'Hydroxyisovalerylcarnitine (iC5-OH)',
@@ -204,17 +205,59 @@ if data is not None:
          '5-Hydroxytryptophan', 'Tryptophan', 'Kynurenine/Tryptophan',
          'Quinolinic acid', 'HIAA', 'Antranillic acid', 'Xanturenic acid', 'Indole-3-lactate', 'Indole-3-acrylate',
          'Kynurenic acid']]
-    scaler_sv = pickle.load(open('scaler_1711.pkl', 'rb'))
-    data1 = scaler_sv.transform(data1)
+    scaler_sv1 = pickle.load(open('first_scaler1911.pkl', 'rb'))
+    data1 = scaler_sv1.transform(data1)
     data1 = preprocessing.normalize(data1, norm='l2')
     a=loaded_model.predict_proba(data1)
     b=float(a[:,1])*100
     st.write('ВЕРОЯТНОСТЬ CCЗ ', round(b,2), '%')
     if b>=70:
-        loaded_model2 = pickle.load(open('RF_second_model_1711.pkl', 'rb'))
-        scaler_sv2 = pickle.load(open('scaler_sv.pkl', 'rb'))
-        data = scaler_sv2.transform(data)
-        data = preprocessing.normalize(data, norm='l2')
-        c=loaded_model2.predict_proba(data)
+        loaded_model2 = pickle.load(open('RF_second_model_1911.pkl', 'rb'))
+        scaler_sv2 = pickle.load(open('scaler1911.pkl', 'rb'))
+        data2 = pd.read_excel(datazero)
+        data2 = data2[['Пролин',
+ 'Лейцин',
+ 'Изолейцин',
+ 'Орнитин',
+ 'Фенилаланин',
+ 'Метионин',
+ 'СДМА',
+ 'Карнитин (С0)',
+ 'Glutarylcarnitine (С5DC)',
+ 'Octenoylcarnitine (C8)',
+ 'Adipoylcarnitine (С6DC)',
+ 'Dodecenoylcarnitine (C12:1)',
+ 'Dodecanoylcarnitine (С12)',
+ 'Kynurenine',
+ 'Tryptophan',
+ 'Kynurenine/Tryptophan',
+ 'Serotonin',
+ 'HIAA',
+ 'Indole-3-carboxaldehyde',
+ 'Indole-3-acrylate',
+ 'Indole-3-propionate',
+ 'Kynurenic acid']]
+        data2 = scaler_sv2.transform(data2)
+        data2 = preprocessing.normalize(data2, norm='l2')
+        c=loaded_model2.predict_proba(data2)
         d=float(c[:,1])*100
         st.write('ВЕРОЯТНОСТЬ РАЗВИТИЯ HTA ', round(d,2), '%')
+   # result1 = pd.read_excel('result1.xlsx')
+    #result1['Результат']=round(b,2)
+    #if b<70:
+    #    result1['Вывод'] = 'Норма'
+    #if 70<b<80:
+    #    result1['Вывод'] = 'Риск'
+    #if b>80:
+    #    result1['Вывод'] = 'Повышенный риск'
+    #st.dataframe(result1)
+    #result2=result1
+    #result2['Показатель'] = 'Вероятность НТА'
+    #if d>70:
+    #    result2['Результат'] = round(d,0)
+    #    result2['Вывод'] = 'Риск HTA'
+    #else:
+    #    result2['Результат'] = round(d,0)
+    #    result2['Вывод'] = 'Риск CHD'
+
+    #st.dataframe(result2)
