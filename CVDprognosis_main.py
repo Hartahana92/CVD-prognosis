@@ -18,7 +18,6 @@ from sklearn import preprocessing
 from sklearn import metrics
 
 st.title("РЕЗУЛЬТАТЫ МЕТАБОЛОМНОГО ПРОФИЛИРОВАНИЯ")
-st.write("Вероятность развития ССЗ")
 datazero = st.file_uploader("Загрузите файл")
 if datazero is not None:
     data = pd.read_excel(datazero)
@@ -189,7 +188,7 @@ if datazero is not None:
         .format(na_rep=' ', precision=2, subset=df4.columns) \
         .format(na_rep=' ', precision=0, subset=['Нижняя граница', 'Верхняя граница']))
 
-    st.write('ПРЕДСКАЗАТЕЛЬНАЯ МОДЕЛЬ ОЦЕНКИ РАЗВИТИЯ СЕРДЕЧНО-СОСУДИСТЫХ ЗАБОЛЕВАНИЙ')
+    st.write('ПРЕДСКАЗАТЕЛЬНАЯ МОДЕЛЬ выявления СЕРДЕЧНО-СОСУДИСТЫХ ЗАБОЛЕВАНИЙ')
     st.write('Классификационная модель построена на основе алгоритма машинного обучения "Случайный Лес"')
     st.write('Метрика качества AUCROC первой модели (ССЗ vs Контроль) - 89%')
     st.write('Метрика качества AUCROC второй модели (ГБ vs ИБС) - 86%')
@@ -245,8 +244,8 @@ if datazero is not None:
         c=loaded_model2.predict_proba(data2)
         d=float(c[:,1])*100
         e=float(c[:,0])*100
-        st.write('ВЕРОЯТНОСТЬ РАЗВИТИЯ ГБ ', round(d,2), '%')
-        st.write('ВЕРОЯТНОСТЬ РАЗВИТИЯ ИБС ', round(e, 2), '%')
+        st.write('ВЕРОЯТНОСТЬ НАЛИЧИЯ ГБ ', round(d,2), '%')
+        st.write('ВЕРОЯТНОСТЬ НАЛИЧИЯ ИБС ', round(e, 2), '%')
    # result1 = pd.read_excel('result1.xlsx')
     #result1['Результат']=round(b,2)
     #if b<70:
