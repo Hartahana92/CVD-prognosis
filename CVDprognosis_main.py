@@ -244,8 +244,10 @@ if datazero is not None:
         c=loaded_model2.predict_proba(data2)
         d=float(c[:,1])*100
         e=float(c[:,0])*100
-        st.write('ВЕРОЯТНОСТЬ НАЛИЧИЯ ГБ ', round(d,2), '%')
-        st.write('ВЕРОЯТНОСТЬ НАЛИЧИЯ ИБС ', round(e, 2), '%')
+        if d>60:
+            st.write('ВЕРОЯТНОСТЬ НАЛИЧИЯ ГБ ', round(d,2), '%')
+        else:
+            st.write('ВЕРОЯТНОСТЬ НАЛИЧИЯ ИБС ', round(e, 2), '%')
    # result1 = pd.read_excel('result1.xlsx')
     #result1['Результат']=round(b,2)
     #if b<70:
